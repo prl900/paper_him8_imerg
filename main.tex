@@ -260,7 +260,9 @@ The U-net model used in the experimental section contains a few modifications wi
 
 To evaluate the performance of the proposed model he experiments presented in this section are divided in two parts. First we perform a variable selection process over the Himawari 8 bands. The objective is to identify the bands that are more related to precipitation and their relative importance. The second part builds upon these results and performs a comparison between the accuracy the proposed model with other baseline machine learning and physics based methodologies.
 
-The variable selection process aims at identifying the Himawari 8 bands that generate the most accurate models for estimating GPM precipitation. To do this, we started by training identical models using just one band as input and the corresponding GPM precipitation data as output. This first iteration required to train 27 possible models, one for each Himawari 8 emission band, repeated for each geographic area. To train these networks we performed a 4-fold cross-validation, leaving out one month of data each time for testing and training with the remaining three months. Validating on complete months, as opposed to randomised sets, is particularly important here because of the high correlation between temporally close samples. The models are trained using a variation of stochastic gradient descent, which means that the order of the input data determines the model behaviour. To minimise the influence of particular input configurations in the results, we train five versions of each model using different seeds to randomise the order of the input data. This means that to perform this first experiment we train 540 identical models. This number is the product of 3 geographical locations, 9 input bands, 4 cross-validation experiments and 5 seeds to randomise the input data.
+The variable selection process aims at identifying the Himawari 8 bands that generate the most accurate models for estimating GPM precipitation. To do this, we trained identical models using just one band as input and the corresponding GPM precipitation data as output. This first iteration required to train 27 possible models, one for each Himawari 8 emission band, repeated for each geographic area. To train these networks we performed a 4-fold cross-validation, leaving out one month of data each time for testing and training with the remaining three months. Validating on complete months, as opposed to randomised sets, is particularly important here because of the high correlation between temporally close samples. The models are trained using a variation of stochastic gradient descent, which means that the order of the input data determines the model behaviour. To minimise the influence of particular input configurations in the results, we train five versions of each model using different seeds to randomise the order of the input data. This means that to perform this first experiment we train 540 identical models. This number is the product of 3 geographical locations, 9 input bands, 4 cross-validation experiments and 5 seeds to randomise the input data.
+
+We use categorical statistics to perform the variable selection process using the 0.2 mm/h precipitation threshold. We use two categorical statistics to measure and compare accuracy: recall (aka sensitivity, hit rate or probability of detection) and precision (aka positive prediction value or success ratio). These two metrics can be combined into the F1 score, which allows to assess the accuracy of the models with one value. Figure \ref{experiment_1a} represents a) the recall scores b) the precision scores and c) summarises the previous two scores, using F1 score for the three regions.
 
 Given the large number of models and the size of the data and models we run these models on the CSIRO Bracewell HPC cluster which offers NVIDIA Tesla P100 GPU accelerators. The total training time of this experiment totals more than 1000 hours on specialised high-performance nodes.
 
@@ -273,13 +275,9 @@ The comparison also includes a regression Random Forest (RF) model \citep{breima
 
 \section{Results}
 
- 
+\subsection{Himawari 8 band selection process}
 
-
-
-\subsection{Himawari 8 band selection}
-
-We use categorical statistics to perform the variable selection process using the 0.2 mm/h precipitation threshold. We use two categorical statistics to measure and compare accuracy: recall (aka sensitivity, hit rate or probability of detection) and precision (aka positive prediction value or success ratio). These two metrics can be combined into the F1 score, which allows to assess the accuracy of the models with one value. Figure \ref{experiment_1a} represents a) the recall scores b) the precision scores and c) summarises the previous two scores, using F1 score for the three regions. 
+We use categorical statistics to perform the variable selection process using the 0.2 mm/h precipitation threshold. We use two categorical statistics to measure and compare accuracy: recall (aka sensitivity, hit rate or probability of detection) and precision (aka positive prediction value or success ratio). These two metrics can be combined into the F1 score, which allows to assess the accuracy of the models with one value. Figure \ref{experiment_1a} represents a) the recall scores b) the precision scores and c) summarises the previous two scores, using F1 score for the three regions.
 
 The results presented in Figure \ref{experiment_1a} combine the individual categorical statistics for each band and location resulting from the cross-validation process for different seed values. The accuracy of each band is evaluated aggregating 20 scores (4 cross-validation performed for of the 5 seeds). The box plots represent the distribution and spread in the statistics for each band and location. %Figure \ref{experiment_1a} represents the scores for three categorical scores evaluated using the 0.2 mm/h threshold for the three considered regions.
 
@@ -330,7 +328,7 @@ Figure \ref{output_cmp} offers a visual comparison between the outputs of a sele
     \label{output_cmp}%
 \end{figure}
 
-\subsection{Method intercomparison}
+\subsection{Methodology comparison}
 
 To perform this comparison we train the RF and NN models using a similar cross-validation methodology used for the proposed CNN models. Bands 8, 11, 13 and 16 are used as inputs to match the information used by CRR and the CNN models. The precipitation estimations generated by the resulting models and CRR are then compared using the F1 score at different thresholds. These scores are aggregated for the different locations and cross validations. To perform the comparison we use the mean of the ensemble estimations for each pixel.
 
