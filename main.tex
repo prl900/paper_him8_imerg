@@ -165,7 +165,7 @@
 \address[1]{Fenner School of Environment and Society. Australian National University. Canberra, Australia}
 
 \begin{abstract}
-%% Text of abstract
+This work explores the application of convolutional neural networks for estimating precipitation using geostationary satellite images. Using data from Himawari 8 and the IMERG precipitation product over Australia, we train a large number of models to identify the combinations of Himawari 8 bands that result in the most accurate models at estimating precipitation. The proposed resulting models are compared with baseline machine learning and physics based models to provide evidence of their improved ability to estimate precipitation. The results shown in this work provide new insights and challenge common practices in previous machine learning and physics based methodologies in this area.
 \end{abstract}
 
 \begin{keyword}
@@ -347,11 +347,11 @@ To motivate the discussion in this section we start presenting a visual comparis
     \label{output_cmp}%
 \end{figure}
 
-As shown in the results section, adding more than two Himawari 8 bands to train precipitation models does not lead to more accurate precipitation estimations. This result challenges the practice of using all the bands to train models as seen in several works in the reviewed literature. Given the high data volume and computational cost of training CNN models, we think that this is a step forward in delivering computationally efficient and accurate precipitation models. In addition, the bands that we identify in this work challenge the traditional practice of using specific IR and WV bands, which opens the door to explore the physical interpretations of the results.
+As shown in the results section, adding more than two Himawari 8 bands to train precipitation models does not lead to more accurate precipitation estimations. This result challenges the practice of using all the bands to train models seen in several works in the reviewed literature. Given the high data volume and computational cost of training CNN models, we think that this is a step forward in delivering computationally efficient and accurate precipitation models. In addition, the bands that we identify in this work challenge the traditional practice of using specific IR and WV bands, which opens the door to explore the physical interpretations of the results.
 
-In general, the resulting precipitation models trained with Himawari 8 are not able to reproduce the sharp contours and detailed spatial structure of precipitation systems detected by IMERG. In the presence of clouds, geostationary satellites sense thermal emissions coming mainly from the top part of the clouds. The relationship between emission bands from cloud tops and precipitation seems to be partial and not enough to estimate accurate precipitation considering these results and techniques described.
+In general, the precipitation models trained with Himawari 8 are not able to reproduce the sharp contours and detailed spatial structure of precipitation systems detected by IMERG. In the presence of clouds, geostationary satellites sense thermal emissions coming mainly from the top part of the clouds. The relationship between emission bands from cloud tops and precipitation seems to be partial and not enough to estimate accurate precipitation considering these results and methodologies described.
 
-Similarly to the previous figure, Figure \ref{baseline_cmp} compares the output of U-net with baseline machine learning and physically based models. The column on the right represents the output of the RF models trained using 4 Himawari 8 bands. Although this simple models are able to detect precipitation areas slightly overestimating their extent, they lack structure and the capacity to identify the areas with high rates of precipitation. The physics based model CRR, represented on the second column from the right, shows a large inconsistency at identifying the intensity of precipitation cells. CRR uses a series of coefficients to estimate precipitation. The coefficients used to generate the output in this study have been produced by the Australian Bureau of Meteorology fitting the CRR model with Himawari 8 data and the local precipitation conditions in Australia. The results in this work seem to indicate that these coefficients might need to be fitted considering regional and type of precipitation considerations. U-net shows an overall improvement at estimating both the structure and quantity of precipitation compared to the baseline models. This figure also provides a visual proof of the capacity of U-nets to incorporate the spatial structure in precipitation compared to other methodologies that operate on individual pixels.
+Similarly to the previous figure, Figure \ref{baseline_cmp} compares the output of U-net with baseline machine learning and physically based models. The column on the right represents the output of the RF models trained using 4 Himawari 8 bands. Although this simple models are able to detect precipitation areas slightly overestimating their extent, they lack structure and the capacity to identify the areas with high rates of precipitation. The physics based model CRR, represented on the second column from the right, shows a large inconsistency at identifying the intensity of precipitation cells. CRR uses a series of coefficients to estimate precipitation. The coefficients used to generate the output in this study have been produced by the Australian Bureau of Meteorology fitting the CRR model with Himawari 8 data and the local precipitation conditions in Australia. The results in this work seem to indicate that these coefficients might need to be fitted considering regional and type of precipitation considerations. The difference in performance between the study areas (WA, NT, SE) might suggest a need for local model fitting, which can readily be done with NN as opposed to the more traditional calibrated physical modelling approaches. U-net shows an overall improvement at estimating both the structure and quantity of precipitation compared to the baseline models. This figure also provides a visual proof of the capacity of U-nets to incorporate the spatial structure in precipitation compared to other methodologies that operate on individual pixels.
 
 \begin{figure}%
     \includegraphics[width=14cm]{baseline_cmp.png}
@@ -359,39 +359,24 @@ Similarly to the previous figure, Figure \ref{baseline_cmp} compares the output 
     \label{baseline_cmp}%
 \end{figure}
 
+While we focused on geostationary data, we know that there is a fundamental limitation of the approach given uncertainty in cloud-top temperature association with rainfall rate in terms of quantity and location. The method we propose can readily incorporate additional independent data, such as inputs from numerical weather models \citep{larraondo2019data}.
 
+We also bring up into the discussion the metrics and methodologies used to train and validate high-resolution, gridded precipitation data. Metrics such as MSE suffer from the double penalty effect penalising models that detect the right amounts of precipitation but fail to place it in the right location \citep{anthes1983regional,mass2002does}. This is specially relevant when combining data from different sensors where pixels are not necessarily acquired at the same time -- this is the case in this work. The proposed U-net models are trained using the MSE loss function which penalise differences on a pixel per pixel basis. Other loss functions based on optimal transport metrics that account for spatial displacements, such as the Wasserstein distance, have been proposed in the literature \citep{farchi2016using} and might be better suited for this problem. This a promising area and something we want to explore in the future.
 
-
-Remote sensing and precipitation estimation are active and complex research subjects, in which different metrics, datasets and analysis methodologies can be applied. We understand the complexity of the subject and acknowledge the present work only explores a limited and partial area of the whole problem. Nevertheless, we think that the techniques and discoveries hereby presented can be of interest to other researchers and practitioners in this field.
-
-
-
-
-
-Another avenue for improving the results presented in this work is to use models that can incorporate the temporal dimension in the data. The atmosphere and precipitation evolves through time following well-defined laws in physics. The high correlation between successive images can provide valuable information to a model for generating estimates that are accurate and consistent through time. There are several approaches that allow incorporating the temporal dimension into neural networks, such as recurrent architectures or 3-dimensional convolutions. The application of these and other architectures and their capacity to incorporate the temporal dimension into the model is something that we also plan to explore. 
-
-Validation of high-resolution precipitation data is highly sensitive to the location and shape of the product. Using measures such as MSE suffer from the double penalty effect penalising estimations that detect the right amounts of precipitation but fail to position in the right location \citep{anthes1983regional,mass2002does}. This is specially relevant when combining data from different sensors and pixels are acquired at different times, as we do in this work. The neural network models considered in the experiments use the MSE loss function which penalise differences on a pixel per pixel basis. Other loss functions based on metrics that account for spatial displacements such as the Wasserstein distance have been proposed in the literature \citep{farchi2016using} and might be better suited for this problem. This a promising area and something we want to explore further in the future.
-
-
-This is what I think should be items for discussion.
-\begin{itemize}
-    \item 
-    
-    \item While we focused on geostationary data, we know that there is a fundamental limitation of the approach given uncertainty in cloud-top temperature association with rainfall rate interns if quantity and location. The method we propose can readily incorporate additional independent data, e.g. inputs from NWP like Z (Larraondo et al.)  
-    
-    \item The difference in performance between study areas (WA, NT, SE) might suggest a need for local model fitting, which can readily[[I guess???]] be done with CNN as opposed to the more traditional calibrated physical modelling approaches.
-\end{itemize}
+Another avenue for improving the results presented in this work is to use models that can incorporate the temporal dimension in the data. The atmosphere and precipitation evolves through time following well-defined physical laws. From a purely data-driven consideration, successive images show high correlations which add valuable information to a model for generating estimates that are accurate and consistent through time. There are several approaches that allow incorporating the temporal dimension into neural networks, such as recurrent architectures or 3-dimensional convolutions. The application of these and other architectures and their capacity to incorporate the temporal dimension into the model is something that remains to be studied. 
 
 \section{Conclusion}  %% \conclusions[modified heading if necessary]
-
----This work presents the results of an investigation on the application of machine learning methodologies to the problem of estimating precipitation using geostationary satellite images.
-
 
 This work explores the application of U-net, a deep learning CNN, to estimate precipitation using Himawari 8 retrievals. We propose using the IMERG ``Final'' precipitation data to train and evaluate the models at estimating precipitation. The models are evaluated considering three locations in Australia and a period of four months between 2018 and 2019.
 
 Traditional methodologies for rainfall estimation from geostationary satellites are mainly based on capturing cloud physical processes characterized by the differential absorption of IR radiation from water vapor and the atmospheric window bands. This work provides a purely data-driven method for assessing these relationships and perhaps suggest alternative groups of bands. U-nets, and CNNs in general, are shown to be able of capturing spatial relationships between pixels that are relevant for identifying cloud structures and precipitation patterns.
 
 In summary, we demonstrate that U-nets offer an advantage at estimating quantitative precipitation from geostationary satellite data when compared to other machine learning and physics based methodologies.
+
+
+\section{Acknowledgements}
+
+The authors acknowledge the financial support given by the Earth Systems Science Organization, Ministry of Earth Science, Government of India (Grant No.IITM/MM-II/ANU/2018/INT-8) to conduct this research under the Monsoon Mission.
 
 %% The Appendices part is started with the command \appendix;
 %% appendix sections are then done as normal sections
