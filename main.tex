@@ -87,7 +87,7 @@
 %% The lineno packages adds line numbers. Start line numbering with
 %% \begin{linenumbers}, end it with \end{linenumbers}. Or switch it on
 %% for the whole article with \linenumbers after \end{frontmatter}.
-%% \usepackage{lineno}
+\usepackage{lineno}
 
 %% natbib.sty is loaded by default. However, natbib options can be
 %% provided with \biboptions{...} command. Following options are
@@ -151,7 +151,7 @@
 \dochead{}
 %% Use \dochead if there is an article header, e.g. \dochead{Short communication}
 
-\title{Insights into Precipitation Estimation from Geostationary Satellites using Deep Learning Models.}
+\title{Insights into Precipitation Estimation from Geostationary Satellites using Deep Learning Models}
 
 %% use optional labels to link authors explicitly to addresses:
 %% \author[label1,label2]{<author name>}
@@ -169,19 +169,22 @@ This work explores the application of convolutional neural networks for estimati
 \end{abstract}
 
 \begin{keyword}
-%% keywords here, in the form: keyword \sep keyword
+remote sensing \sep machine learning \sep weather forecasting
 
 %% MSC codes here, in the form: \MSC code \sep code
 %% or \MSC[2008] code \sep code (2000 is the default)
-
 \end{keyword}
 
 \end{frontmatter}
 
+\footnotetext{P. R. Larraondo carried out the research and wrote the manuscript.}
+\footnotetext{L. J. Renzullo contributed designing the experiments and writing the manuscript.}
+\footnotetext{A. I. J. M. van Dijk contributed structuring and writing the manuscript.}
+
 %%
 %% Start line numbering here if you want
 %%
-% \linenumbers
+\linenumbers
 
 %% main text
 \section{Introduction}
@@ -256,7 +259,7 @@ U-nets, and CNN encoder-decoder architectures in general, combine convolution wi
     \label{model_cmp}%
 \end{figure}
 
-The U-net model used in this work contains a few modifications with respect to its basic implementation. First of all, images from Himawari 8 and IMERG, resulting from the preprocessing step previously described, have different resolutions and require an asymmetrical version of U-net in which the encoder has two more hidden layers than the decoder, as represented in Figure \ref{model_cmp}. Another modification introduced in the proposed U-net model is the application of a Rectified Linear Unit (RELU) operation in the last layer of the network to eliminate negative values in the output of the network. This operation constraints the model to generate only positive values in accordance with the physical nature of precipitation. Finally, we use the Mean Squared Error (MSE) loss function to train a regression model that generates quantitative precipitation, as opposed to segmentation a kind of classification task that U-net was initially designed for. The model presented in this work is implemented using \citep{chollet2018keras} and all the code for reproducing the experiments presented in this manuscript is available at: \href{https://github.com/prl900/unet_him8_gpm}{https://github.com/prl900/unet\_him8\_gpm}.
+The U-net model used in this work contains a few modifications with respect to its basic implementation. First of all, images from Himawari 8 and IMERG, resulting from the preprocessing step previously described, have different resolutions and require an asymmetrical version of U-net in which the encoder has two more hidden layers than the decoder, as represented in Figure \ref{model_cmp}. Another modification introduced in the proposed U-net model is the application of a Rectified Linear Unit (RELU) operation in the last layer of the network to eliminate negative values in the output of the network. This operation constraints the model to generate only positive values in accordance with the physical nature of precipitation. Finally, we use the Mean Squared Error (MSE) loss function to train a regression model that generates quantitative precipitation, as opposed to segmentation a kind of classification task that U-net was initially designed for. The model presented in this work is implemented using \citep{chollet2018keras}.
 
 \subsection{Experimental design}
 
@@ -373,6 +376,10 @@ Traditional methodologies for rainfall estimation from geostationary satellites 
 
 In summary, we demonstrate that U-nets offer an advantage at estimating quantitative precipitation from geostationary satellite data when compared to other machine learning and physics based methodologies.
 
+
+\section{Code availability}
+
+The code used to run the experiments presented in this manuscript are available at: \href{https://github.com/prl900/unet_him8_gpm}{https://github.com/prl900/unet\_him8\_gpm} under an Apache License 2.0.
 
 \section{Acknowledgements}
 
